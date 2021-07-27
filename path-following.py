@@ -3,6 +3,8 @@
 
 import scipy
 import numpy as np
+from math import sqrt
+from numba import njit
 
 
 class path():
@@ -46,5 +48,22 @@ class path():
         return self.path
 
 
-def followPath(path):
-    pass
+def distance(a, b):
+    return sqrt(((a[0]-b[0])**2)+((a[1]-b[1])**2)+((a[2]-b[2])**2))
+
+
+def followPath(path, curPos, dist, kp):
+    dists = []
+    for i in path:
+        dists.append(distance(curPos, i))
+    closest = 999999999999999999999
+    closestNum = 0
+    counter = 0
+    for i in dists:
+        if i <= closest:
+            closest = i
+            closestNum = counter
+    return [vel, dir]
+
+
+print(np.random())
