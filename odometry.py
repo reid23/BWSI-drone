@@ -5,6 +5,12 @@
 class odometry():
     pos = [0, 0, 0]
     rot = [0, 0, 0]
+    running = True
+    def __init__(self, knownMarkers={}):
 
     def startOdometry(self):
-        pass
+        while(self.running=True):
+            pass
+
+    def stopOdometry(self):
+        self.running = False
