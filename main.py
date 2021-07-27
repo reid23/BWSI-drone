@@ -4,13 +4,26 @@
 # 2. receiving and storing images from the camera
 # 3. starting and stopping other threads
 
+#import block
 from djitellopy import Tello
 import cv2
 from odometry import odometry
 from threading import Thread
 
+# declaring objects
 odo = odometry()
+tello = Tello()
+cvLoop = CvLoop()
 
-t = Thread(target=odo.startOdometry())
+tello.connect()
+tello.streamon()
 
-t.start()
+# * tello.takeoff() #add when ready
+
+# threads
+odoThread = Thread(target=odo.startOdometry())
+cvThread = Thread(target=cvLoop.imageProcessing())
+odoThread.start()
+cvThread.start()
+
+while(True):
