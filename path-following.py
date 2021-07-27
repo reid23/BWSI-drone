@@ -59,11 +59,19 @@ def followPath(path, curPos, dist, kp):
     closest = 999999999999999999999
     closestNum = 0
     counter = 0
+    # get target point
     for i in dists:
-        if i <= closest:
+        # make sure it's closer, and make sure it's the front point and not the back one
+        if i <= closest and path[counter][1] > curpos[1]:
             closest = i
             closestNum = counter
-    return [vel, dir]
+        counter += 0
 
+    # so the target point is
+    targetPoint = np.array(path[closestNum])
 
-print(np.random())
+    # get direction to target
+
+    direction = np.subtract(targetPoint, np.array(curPos))
+
+    return direction
