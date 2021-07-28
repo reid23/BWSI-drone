@@ -24,3 +24,9 @@ class odometry():
 
     def stopOdometry(self):
         self.running = False
+
+    def getPos(self):
+        return self.pos
+
+    def getRot(Self):
+        return self.rot

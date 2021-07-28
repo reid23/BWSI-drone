@@ -8,17 +8,17 @@ from numba import njit
 
 
 class path():
-    points = []
-    x = []
-    y = []
-    z = []
-    pathxy = 0
-    pathyz = 0
-    path1 = []
-    path2 = []
-    path = []
 
-    def __init__(self, points):
+    def __init__(self, points=[]):
+        self.points = []
+        self.x = []
+        self.y = []
+        self.z = []
+        self.pathxy = 0
+        self.pathyz = 0
+        self.path1 = []
+        self.path2 = []
+        self.path = []
         self.points = points
         self.recalc()
 
@@ -74,4 +74,4 @@ def followPath(path, curPos, dist, kp):
 
     direction = np.subtract(targetPoint, np.array(curPos))
 
-    return direction
+    return direction*kp

@@ -9,11 +9,14 @@ from djitellopy import Tello
 import cv2
 from odometry import odometry
 from threading import Thread
+from image-processing import *
+from path-following import *
 
 # declaring objects
 odo = odometry()
 tello = Tello()
 cvLoop = CvLoop()
+path = Path()
 
 tello.connect()
 tello.streamon()
@@ -27,3 +30,5 @@ odoThread.start()
 cvThread.start()
 
 while(True):
+    direction = followPath(path.getPath(), odo.getPos(), 20, 1)
+    tello.send_rc_control(direction[0], direction[1], direction[2], 0)
