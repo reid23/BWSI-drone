@@ -21,6 +21,7 @@ class cvLoop:
         output = {}
         for i in list(keys(tvec)):
             output[i] = [rvec[i], tvec[i]]
+        return output
 
     def imageProcessing(self):
         # Video Loop:
