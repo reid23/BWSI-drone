@@ -44,6 +44,9 @@ class path():
         self.points.append(point)
         self.recalc()
 
+    def setPoints(self, points):
+        self.points = points
+
     def getPath(self):
         return self.path
 

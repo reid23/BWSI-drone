@@ -30,5 +30,7 @@ odoThread.start()
 cvThread.start()
 
 while(True):
+    odo.setMarkers(cvLoop.odoFormat())
+    path.setPoints(odo.hoopMarkers)
     direction = followPath(path.getPath(), odo.getPos(), 20, 1)
     tello.send_rc_control(direction[0], direction[1], direction[2], 0)
