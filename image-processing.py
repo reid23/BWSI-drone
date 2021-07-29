@@ -20,9 +20,10 @@ class cvLoop:
     distortion = np.array([-0.033458, 0.105152, 0.001256, -0.006647, 0.000000])
 
     def odoFormat(self):
-        output = {}
-        for i in list(keys(tvec)):
-            output[i] = [rvec[i], tvec[i]]
+        output = [[], []]
+        for i in range(len(self.tvecIds)):
+            output[0].append(self.tvecIds[i])
+            output[1].append(self.tvecValues[i])
         return output
 
     def imageProcessing(self):

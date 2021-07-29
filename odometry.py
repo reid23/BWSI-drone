@@ -7,29 +7,33 @@ class odometry():
         self.knownMarkers = knownMarkers
         self.pos = [0, 0, 0]
         self.rot = [0, 0, 0]
+        self.hoopPosList = []
         self.running = True
-        self.ids
+        self.ids = []
         self.markers = []  # tvec.  get from image processing
         self.knownMarkers = []  # IDs of known markers
         self.hoopMarkers = []  # these are the ids of the hoop markers
 
     def startOdometry(self):
         while(self.running == True):
-            for marker in self.markers:
+            for marker in self.ids:
                 if marker in self.knownMarkers:
                     pass
                     # TODO get rvec, tvec, and use them to update self.pos and self.rot
                 elif marker in self.hoopMarkers:
-                    pass
+                    # TODO: calculate the global position of the marker and append that
+                    self.hoopPosList.append()
+                    self.hoopPosList = self.hoopPoses()
                 else:
-                    self.hoopMarkers[marker] = self.markers[marker]
+                    self.hoopMarkers.append(marker)
 
     def hoopPoses(self):
-        pass
+
         # return hoop positions
 
-    def setMarkers(self, markers):
-        self.markers = markers
+    def setMarkers(self, markers):  # markers is the output of cvloop.getOdoFormat()
+        self.markers = markers[1]
+        self.ids = markers[0]
 
     def stopOdometry(self):
         self.running = False
