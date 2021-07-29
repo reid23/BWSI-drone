@@ -11,8 +11,10 @@ distortion = np.array([-0.033458, 0.105152, 0.001256, -0.006647, 0.000000])
 
 class cvLoop:
     def __init__(self):
-        rvec = {}
-        tvec = {}
+        #self.rvec = {}
+        self.tvecIds = []
+        self.tvecValues = []
+
     cameraMatrix = np.array([[921.170702, 0.000000, 459.904354], [
         0.000000, 919.018377, 351.238301], [0.000000, 0.000000, 1.000000]])
     distortion = np.array([-0.033458, 0.105152, 0.001256, -0.006647, 0.000000])
@@ -33,6 +35,8 @@ class cvLoop:
                 img, dict, parameters=params)  # finding aruco markers
             if corners:  # aruco loop
                 checked_ids = []  # recording used ids, only performs calculations once per every two markers
+                tvecIds = []
+                tvecValues = []
                 for i in range(len(corners)):
                     if ids[i] in checked_ids:
                         continue  # checks if it's been reviewed yet
@@ -73,8 +77,10 @@ class cvLoop:
                     # drawing marker
                     cv2.aruco.drawAxis(img, cameraMatrix,
                                        distortion, rvec, tvec, 30)
-                    self.rvec[ids[i]] = rvec
-                    self.tvec[ids[i]] = tvec
+                    tvecIds.append(ids[i])
+                    tvecValues.append(tvec)
+                self.tvecIds = tvecIds
+                self.tvecValues = tvecValues
 
             # Displaying screen
             battery = "Battery: " + str(tello.get_battery()) + "%"
