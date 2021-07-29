@@ -32,7 +32,6 @@ odoThread.start()
 cvThread.start()
 
 while(True):
-    print('here')
     odo.setMarkers(cvLoop.odoFormat())
     path.setPoints(list(odo.markers.values()))
     direction = followPath(path.getPath(), odo.getPos(), 20, 1)
