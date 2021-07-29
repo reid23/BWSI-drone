@@ -8,9 +8,10 @@ class odometry():
         self.pos = [0, 0, 0]
         self.rot = [0, 0, 0]
         self.running = True
-        self.markers = {}  # id : [rvec, tvec].  get from image processing
-        self.knownMarkers = {}
-        self.hoopMarkers = {}  # these are the unkown markers.  for path-following
+        self.ids
+        self.markers = []  # tvec.  get from image processing
+        self.knownMarkers = []  # IDs of known markers
+        self.hoopMarkers = []  # these are the ids of the hoop markers
 
     def startOdometry(self):
         while(self.running == True):
@@ -18,9 +19,14 @@ class odometry():
                 if marker in self.knownMarkers:
                     pass
                     # TODO get rvec, tvec, and use them to update self.pos and self.rot
-                else:
+                elif marker in self.hoopMarkers:
                     pass
-                    # TODO add point to path for path planner
+                else:
+                    self.hoopMarkers[marker] = self.markers[marker]
+
+    def hoopPoses(self):
+        pass
+        # return hoop positions
 
     def setMarkers(self, markers):
         self.markers = markers
