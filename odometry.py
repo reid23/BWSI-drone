@@ -1,8 +1,12 @@
 # this file has the odometry class
 # it takes in the image from the drone and updates the position array
+<<<<<<< HEAD
 
 import numpy as np
 
+=======
+import numpy as np
+>>>>>>> c150ae2d56ab926b84cedf9931e12b1e659c548c
 
 class Dictlist(dict):
     def __setitem__(self, key, value):
