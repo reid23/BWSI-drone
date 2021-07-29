@@ -1,7 +1,7 @@
 # converts path and odometry data, using a PID loop and a path following algorithm (currently pure pursuit)
 # to generate send_rc_control values that can be sent by main.py
 
-import scipy
+import scipy.interpolate
 import numpy as np
 from math import sqrt
 from numba import njit
@@ -23,22 +23,26 @@ class path():
         self.recalc()
 
     def recalc(self):
-        for i in points:
+        for i in self.points:
             self.x.append(i[0])
             self.y.append(i[1])
             self.z.append(i[2])
-        self.pathxy = scipy.interpolate.CubicSpline(
-            self.x, self.y, bc_type='clamped')
-        self.pathyz = scipy.interpolate.CubicSpline(
-            self.y, self.z, bc_type='clamped')
+        try:
+            self.pathxy = scipy.interpolate.CubicSpline(
+                self.x, self.y, bc_type='clamped')
+            self.pathyz = scipy.interpolate.CubicSpline(
+                self.y, self.z, bc_type='clamped')
 
-        for i in range(max(self.y)):  # convert splines to arrays of points
-            self.path1.append(self.pathxy(i))
-            self.path2.append(self.pathyz(i))
+            for i in range(max(self.y)):  # convert splines to arrays of points
+                self.path1.append(self.pathxy(i))
+                self.path2.append(self.pathyz(i))
 
-        # convert arrays of 2d points to one array of 3d points
-        for i in range(len(self.path1)-1):
-            self.path.append(self.path1[i].append(self.path2[i][1]))
+            # convert arrays of 2d points to one array of 3d points
+            for i in range(len(self.path1)-1):
+                self.path.append(self.path1[i].append(self.path2[i][1]))
+
+        except ValueError:
+            print("not enough points for a path")
 
     def addPoint(self, point):
         self.points.append(point)
@@ -65,7 +69,7 @@ def followPath(path, curPos, dist, kp):
     # get target point
     for i in dists:
         # make sure it's closer, and make sure it's the front point and not the back one
-        if i <= closest and path[counter][1] > curpos[1]:
+        if i <= closest and path[counter][1] > curPos[1]:
             closest = i
             closestNum = counter
         counter += 0

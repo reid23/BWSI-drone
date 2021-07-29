@@ -25,7 +25,7 @@ class cvLoop:
             output.append([self.tvecIds[i], self.tvecValues[i]])
         return output
 
-    def imageProcessing(self):
+    def imageProcessing(self, tello):
         # Video Loop:
         while True:
             img = tello.get_frame_read().frame

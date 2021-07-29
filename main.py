@@ -15,8 +15,8 @@ from path_following import *
 # declaring objects
 odo = odometry()
 tello = Tello()
-cvLoop = CvLoop()
-path = Path()
+cvLoop = cvLoop()
+path = path()
 
 tello.connect()
 tello.streamon()
@@ -25,7 +25,7 @@ tello.streamon()
 
 # threads
 odoThread = Thread(target=odo.startOdometry())
-cvThread = Thread(target=cvLoop.imageProcessing())
+cvThread = Thread(target=cvLoop.imageProcessing(), args=[tello])
 odoThread.start()
 cvThread.start()
 
