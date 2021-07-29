@@ -9,8 +9,8 @@ from djitellopy import Tello
 import cv2
 from odometry import odometry
 from threading import Thread
-from image-processing import *
-from path-following import *
+from image_processing import *
+from path_following import *
 
 # declaring objects
 odo = odometry()
