@@ -16,35 +16,30 @@ class odometry():
         self.markersDictFixed = Dictlist()
         self.knownMarkers = knownMarkers
         self.pos = [0, 0, 0]
-        self.rot = [0, 0, 0]
-        self.hoopPosList = []
+        #self.rot = [0, 0, 0]
         self.running = True
-        self.knownMarkersIds = []  # IDs of known markers
-        self.hoopMarkersIds = []  # these are the ids of the hoop markers
+        self.markers = {}  # tvec.  get from image processing
+        self.knownMarkers = {}  # IDs of known markers
+        # self.hoopMarkers = []  # these are the ids of the hoop markers
 
     def startOdometry(self):
         while(self.running == True):
-            for marker in self.markersDictFixed:
-                if marker in self.knownMarkers:
-                    pass
-                    # TODO get rvec, tvec, and use them to update self.pos and self.rot
-                elif marker in self.hoopMarkers:
-                    # TODO: calculate the global position of the marker and append that
-                    self.hoopPosList = self.hoopPoses()
+            i = 1
+            translation = [0, 0, 0]
+            for item in self.markers.items():
+                if item[0] in self.knownMarkers.keys():
+                    translation = translation + \
+                        (self.knownMarkers[item[0]] - item[1])
+                    i = i + 1
                 else:
-                    self.hoopMarkers.append(marker)
-
-    def hoopPoses(self):
-
-        # return hoop positions
+                    self.knownMarkers[item[0]] = item[1] + self.pos
+            translation = translation / i
+            self.pos = translation
 
     def setMarkers(self, markers):  # markers is the output of cvloop.getOdoFormat()
-        d = Dictlist()
-        for i in range(len(markers[0])):
-            d[markers[0][i]] = markers[1][i]
-        self.markersDictFixed = d
-        self.markers = markers[1]
-        self.ids = markers[0]
+        self.markers = {}
+        for each in markers:
+            self.markers[each[0]] = each[1] * np.array([1, -1, 1])
 
     def stopOdometry(self):
         self.running = False
@@ -52,5 +47,5 @@ class odometry():
     def getPos(self):
         return self.pos
 
-    def getRot(Self):
-        return self.rot
+    # def getRot(Self):
+        # return self.rot
