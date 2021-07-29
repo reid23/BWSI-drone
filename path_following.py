@@ -23,10 +23,16 @@ class path():
         self.recalc()
 
     def recalc(self):
+        self.x = []
+        self.y = []
+        self.z = []
         for i in self.points:
             self.x.append(i[0])
             self.y.append(i[1])
             self.z.append(i[2])
+        print(self.x)
+        print(self.y)
+        print(self.z)
         try:
             self.pathxy = scipy.interpolate.CubicSpline(
                 self.x, self.y, bc_type='clamped')
@@ -41,8 +47,9 @@ class path():
             for i in range(len(self.path1)-1):
                 self.path.append(self.path1[i].append(self.path2[i][1]))
 
-        except ValueError:
+        except ValueError as e:
             print("not enough points for a path")
+            print(e)
 
     def addPoint(self, point):
         self.points.append(point)
@@ -50,6 +57,7 @@ class path():
 
     def setPoints(self, points):
         self.points = points
+        self.recalc()
 
     def getPath(self):
         return self.path
@@ -77,7 +85,8 @@ def followPath(path, curPos, dist, kp):
     # so the target point is
     try:
         targetPoint = np.array(path[closestNum])
-    except IndexError:
+    except IndexError as e:
+        print(e)
         print('no points left')
         targetPoint = curPos
     # get direction to target

@@ -21,7 +21,7 @@ path = path()
 tello.connect()
 tello.streamon()
 
-# * tello.takeoff() #add when ready
+tello.takeoff()  # add when ready
 print('here')
 # threads
 odoThread = Thread(target=odo.startOdometry)
@@ -31,9 +31,15 @@ print('here')
 odoThread.start()
 cvThread.start()
 
-while(True):
-    odo.setMarkers(cvLoop.odoFormat())
-    path.setPoints(list(odo.markers.values()))
-    direction = followPath(path.getPath(), odo.getPos(), 20, 1)
-    tello.send_rc_control(int(direction[0]), int(
-        direction[1]), int(direction[2]), 0)
+startPoint = odo.getPos()
+print(startPoint)
+try:
+    while(True):
+        odo.setMarkers(cvLoop.odoFormat())
+        path.setPoints(list(odo.markers.values()))
+        direction = followPath(path.getPath(), odo.getPos(), 20, 20)
+        tello.send_rc_control(int(direction[0]), int(
+            direction[1]), int(direction[2]), 0)
+except KeyboardInterrupt:
+    tello.land()
+    exit(0)

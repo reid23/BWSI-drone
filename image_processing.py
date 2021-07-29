@@ -68,7 +68,6 @@ class cvLoop:
                     # checking that rvec is accurate (there were some problems with inaccuracies
                     try:
                         if abs(lastrvec[0][0][0] - rvec[0][0][0]) > 0.5:
-                            print("HELP")
                             rvec = lastrvec
                         else:
                             lastrvec = rvec
@@ -77,8 +76,8 @@ class cvLoop:
                     # drawing marker
                     cv2.aruco.drawAxis(img, cameraMatrix,
                                        distortion, rvec, tvec, 30)
-                    tvecIds.append(ids[i])
-                    tvecValues.append(tvec)
+                    tvecIds.append(ids[i][0])
+                    tvecValues.append(tvec[0][0])
                 self.tvecIds = tvecIds
                 self.tvecValues = tvecValues
 
