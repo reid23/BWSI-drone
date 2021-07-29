@@ -75,8 +75,11 @@ def followPath(path, curPos, dist, kp):
         counter += 0
 
     # so the target point is
-    targetPoint = np.array(path[closestNum])
-
+    try:
+        targetPoint = np.array(path[closestNum])
+    except IndexError:
+        print('no points left')
+        targetPoint = curPos
     # get direction to target
 
     direction = np.subtract(targetPoint, np.array(curPos))

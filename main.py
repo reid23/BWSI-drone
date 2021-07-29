@@ -4,7 +4,7 @@
 # 2. receiving and storing images from the camera
 # 3. starting and stopping other threads
 
-#import block
+# import block
 from djitellopy import Tello
 import cv2
 from odometry import odometry
@@ -22,15 +22,19 @@ tello.connect()
 tello.streamon()
 
 # * tello.takeoff() #add when ready
-
+print('here')
 # threads
-odoThread = Thread(target=odo.startOdometry())
-cvThread = Thread(target=cvLoop.imageProcessing(), args=[tello])
+odoThread = Thread(target=odo.startOdometry)
+cvThread = Thread(target=cvLoop.imageProcessing, args=[tello])
+
+print('here')
 odoThread.start()
 cvThread.start()
 
 while(True):
+    print('here')
     odo.setMarkers(cvLoop.odoFormat())
-    path.setPoints(odo.hoopMarkers)
+    path.setPoints(list(odo.markers.values()))
     direction = followPath(path.getPath(), odo.getPos(), 20, 1)
-    tello.send_rc_control(direction[0], direction[1], direction[2], 0)
+    tello.send_rc_control(int(direction[0]), int(
+        direction[1]), int(direction[2]), 0)

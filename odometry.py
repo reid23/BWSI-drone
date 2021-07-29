@@ -1,12 +1,8 @@
 # this file has the odometry class
 # it takes in the image from the drone and updates the position array
-<<<<<<< HEAD
 
 import numpy as np
 
-=======
-import numpy as np
->>>>>>> c150ae2d56ab926b84cedf9931e12b1e659c548c
 
 class Dictlist(dict):
     def __setitem__(self, key, value):
@@ -22,7 +18,7 @@ class odometry():
         self.markersDictFixed = Dictlist()
         self.knownMarkers = knownMarkers
         self.pos = [0, 0, 0]
-        #self.rot = [0, 0, 0]
+        # self.rot = [0, 0, 0]
         self.running = True
         self.markers = {}  # tvec.  get from image processing
         self.knownMarkers = {}  # IDs of known markers
@@ -39,7 +35,7 @@ class odometry():
                     i = i + 1
                 else:
                     self.knownMarkers[item[0]] = item[1] + self.pos
-            translation = translation / i
+            translation = list(np.array(translation) / i)
             self.pos = translation
 
     def setMarkers(self, markers):  # markers is the output of cvloop.getOdoFormat()
