@@ -95,24 +95,9 @@ def followPath(path, curPos, dist, kp):
     try:
         targetPoint = np.array(path[closestNum])
         direction = np.subtract(targetPoint[0:3], np.array(curPos))
+        return direction*kp
     except IndexError:
         print('no points left')
         targetPoint = curPos
+        return [0, 0, 0]
     # get direction to target
-
-    return direction*kp
-
-
-path = path(points=[[0.0, 0.0, 0.0], [100.234897328, 100.48972384, 100.23748918], [
-            200.42963985, 400.162849, 700.275098230]])
-
-followPath(path.getPath(), [50.3170, 53.2045, 62.237095283], 50, 1)
-
-startTime = time.time()
-for i in range(500):
-    path.recalc()
-    followPath(path.getPath(), [50.3170, 53.2045, 62.237095283], 50, 1)
-
-endTime = time.time()
-
-print('recalculating 100 times took ' + str(endTime-startTime) + ' seconds.')

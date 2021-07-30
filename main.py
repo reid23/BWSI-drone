@@ -26,8 +26,8 @@ tello.streamon()
 startPos = [0, 0, 0]
 
 
-# tello.takeoff()  # add when ready
-# tello.move_up(50)
+tello.takeoff()  # add when ready
+tello.move_up(50)
 
 
 # threads
@@ -39,12 +39,13 @@ cvThread.start()
 
 try:
     while(True):
+        print('here')
         odo.setMarkers(cvLoop.odoFormat())
         path.setPoints(
             [[0.0, 0.0, 0.0]] + list(np.array(list(odo.getRings().values()))))
-        direction = followPath(path.getPath(), odo.getPos(), 20, 1)
-        # tello.send_rc_control(int(direction[0]), int(
-        #     direction[1]), int(direction[2]), 0)
+        direction = followPath(path.getPath(), odo.getPos(), 20, 0.5)
+        tello.send_rc_control(int(direction[0]), int(
+            direction[1]), int(direction[2]), 0)
         print(odo.getPos())
         #tello.send_rc_control(lr, fb, ud, yaw)
         sleep(1/30)
