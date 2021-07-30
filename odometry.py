@@ -49,5 +49,8 @@ class odometry():
     def getPos(self):
         return self.pos
 
+    def getRings(self):
+        return self.knownMarkers
+
     # def getRot(Self):
         # return self.rot

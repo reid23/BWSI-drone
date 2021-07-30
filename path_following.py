@@ -5,6 +5,7 @@ import scipy.interpolate
 import numpy as np
 from math import sqrt
 from numba import njit
+from math import floor
 
 
 class path():
@@ -27,25 +28,26 @@ class path():
         self.y = []
         self.z = []
         for i in self.points:
-            self.x.append(i[0])
-            self.y.append(i[1])
-            self.z.append(i[2])
-        print(self.x)
-        print(self.y)
-        print(self.z)
+            self.x.append(i[2])
+            self.y.append(i[0])
+            self.z.append(i[1])
         try:
             self.pathxy = scipy.interpolate.CubicSpline(
                 self.x, self.y, bc_type='clamped')
             self.pathyz = scipy.interpolate.CubicSpline(
-                self.y, self.z, bc_type='clamped')
+                self.x, self.z, bc_type='clamped')
 
-            for i in range(max(self.y)):  # convert splines to arrays of points
+            # convert splines to arrays of points
+            for i in range(int(floor(abs(max(self.x))))):
                 self.path1.append(self.pathxy(i))
                 self.path2.append(self.pathyz(i))
 
             # convert arrays of 2d points to one array of 3d points
-            for i in range(len(self.path1)-1):
-                self.path.append(self.path1[i].append(self.path2[i][1]))
+            for i in range(len(self.path1)):
+                self.path.append([])
+                self.path[i].append(i)
+                self.path[i].append(self.path1[i])
+                self.path[i].append(self.path2[i])
 
         except ValueError as e:
             print("not enough points for a path")
@@ -69,15 +71,17 @@ def distance(a, b):
 
 def followPath(path, curPos, dist, kp):
     dists = []
+    path = np.array(path).tolist()
     for i in path:
-        dists.append(distance(curPos, i))
+        if not i == []:
+            dists.append(distance(curPos, i))
     closest = 999999999999999999999
     closestNum = 0
     counter = 0
     # get target point
     for i in dists:
         # make sure it's closer, and make sure it's the front point and not the back one
-        if i <= closest and path[counter][1] > curPos[1]:
+        if i <= closest and path[counter][2] > curPos[2]:
             closest = i
             closestNum = counter
         counter += 0
@@ -90,7 +94,6 @@ def followPath(path, curPos, dist, kp):
         print('no points left')
         targetPoint = curPos
     # get direction to target
-
-    direction = np.subtract(targetPoint, np.array(curPos))
+    direction = np.subtract(targetPoint[0:3], np.array(curPos))
 
     return direction*kp
