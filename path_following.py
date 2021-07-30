@@ -6,6 +6,7 @@ import numpy as np
 from math import sqrt
 from numba import njit
 from math import floor
+import time
 
 
 class path():
@@ -23,6 +24,7 @@ class path():
         self.points = points
         self.recalc()
 
+    # @njit
     def recalc(self):
         self.x = []
         self.y = []
@@ -37,6 +39,9 @@ class path():
             self.pathyz = scipy.interpolate.CubicSpline(
                 self.x, self.z, bc_type='clamped')
 
+            self.path1 = []
+            self.path2 = []
+            self.path = []
             # convert splines to arrays of points
             for i in range(int(floor(abs(max(self.x))))):
                 self.path1.append(self.pathxy(i))
@@ -49,9 +54,9 @@ class path():
                 self.path[i].append(self.path1[i])
                 self.path[i].append(self.path2[i])
 
-        except ValueError as e:
+        except ValueError:
             print("not enough points for a path")
-            print(e)
+            # print(e)
 
     def addPoint(self, point):
         self.points.append(point)
@@ -65,17 +70,17 @@ class path():
         return self.path
 
 
+@njit
 def distance(a, b):
     return sqrt(((a[0]-b[0])**2)+((a[1]-b[1])**2)+((a[2]-b[2])**2))
 
 
 def followPath(path, curPos, dist, kp):
     dists = []
-    path = np.array(path).tolist()
+    path = np.array(path)
     for i in path:
-        if not i == []:
-            dists.append(distance(curPos, i))
-    closest = 999999999999999999999
+        dists.append(distance(np.array(curPos), i))
+    closest = 9999999
     closestNum = 0
     counter = 0
     # get target point
@@ -84,16 +89,30 @@ def followPath(path, curPos, dist, kp):
         if i <= closest and path[counter][2] > curPos[2]:
             closest = i
             closestNum = counter
-        counter += 0
+        counter += 1
 
     # so the target point is
     try:
         targetPoint = np.array(path[closestNum])
-    except IndexError as e:
-        print(e)
+        direction = np.subtract(targetPoint[0:3], np.array(curPos))
+    except IndexError:
         print('no points left')
         targetPoint = curPos
     # get direction to target
-    direction = np.subtract(targetPoint[0:3], np.array(curPos))
 
     return direction*kp
+
+
+path = path(points=[[0.0, 0.0, 0.0], [100.234897328, 100.48972384, 100.23748918], [
+            200.42963985, 400.162849, 700.275098230]])
+
+followPath(path.getPath(), [50.3170, 53.2045, 62.237095283], 50, 1)
+
+startTime = time.time()
+for i in range(500):
+    path.recalc()
+    followPath(path.getPath(), [50.3170, 53.2045, 62.237095283], 50, 1)
+
+endTime = time.time()
+
+print('recalculating 100 times took ' + str(endTime-startTime) + ' seconds.')

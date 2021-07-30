@@ -47,6 +47,7 @@ try:
         #     direction[1]), int(direction[2]), 0)
         print(odo.getPos())
         #tello.send_rc_control(lr, fb, ud, yaw)
+        sleep(1/30)
 except KeyboardInterrupt:
     tello.land()
     odo.stopOdometry()

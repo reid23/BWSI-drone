@@ -2,6 +2,7 @@
 # it takes in the image from the drone and updates the position array
 
 import numpy as np
+from time import sleep
 
 
 class Dictlist(dict):
@@ -37,6 +38,7 @@ class odometry():
                     self.knownMarkers[item[0]] = item[1] + self.pos
             translation = list(np.array(translation) / i)
             self.pos = translation
+            sleep(1/30)
 
     def setMarkers(self, markers):  # markers is the output of cvloop.getOdoFormat()
         self.markers = {}

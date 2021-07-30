@@ -94,4 +94,4 @@ class cvLoop:
             cv2.putText(img, barometer, (650, 90),
                         cv2.FONT_HERSHEY_COMPLEX, 1, (0, 255, 0), 2)
             cv2.imshow("Image", img)
-            cv2.waitKey(1)
+            cv2.waitKey(5)
