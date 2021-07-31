@@ -22,7 +22,8 @@ class cvLoop:
     def odoFormat(self):
         output = []
         for i in range(len(self.tvecIds)):
-            output.append([self.tvecIds[i], self.tvecValues[i]])
+            output.append(
+                [self.tvecIds[i], np.array(self.tvecValues[i]).tolist()])
         return output
 
     def imageProcessing(self, tello):

@@ -30,7 +30,7 @@ class odometry():
             i = 1
             translation = [0, 0, 0]
             for item in self.markers.items():
-                if item[0] in self.knownMarkers.keys():
+                if item[0] in list(self.knownMarkers.keys()):
                     translation = translation + \
                         (self.knownMarkers[item[0]] - item[1])
                     i = i + 1
